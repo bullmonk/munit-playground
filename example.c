@@ -18,81 +18,21 @@
 #pragma warning(disable: 4127)
 #endif
 
-const char *getscheme() {
-  return "GETFILE";
+int buildrequest(const char *path, char *request) {
+  return snprintf(request, 288, "GETFILE GET %s \r\n\r\n", path);
 }
 
 /* Tests are functions that return void, and take a single void*
  * parameter.  We'll get to what that parameter is later. */
 static MunitResult
 test_compare(const MunitParameter params[], void* data) {
-  /* We'll use these later */
-  // const unsigned char val_uchar = 'b';
-  // const short val_short = 1729;
-  // double pi = 3.141592654;
-  char* stewardesses = "GETFILE";
-  // char* most_fun_word_to_type;
 
-  /* These are just to silence compiler warnings about the parameters
-   * being unused. */
-  // (void) params;
-  // (void) data;
+  char* stewardesses = "GETFILE GET /test/test.t \r\n\r\n";
 
-  /* Let's start with the basics. */
-  // munit_assert(0 != 1);
+  char test[1000];
+  buildrequest("/test/test.t", test);
 
-  /* There is also the more verbose, though slightly more descriptive
-     munit_assert_true/false: */
-  // munit_assert_false(0);
-
-  /* You can also call munit_error and munit_errorf yourself.  We
-   * won't do it is used to indicate a failure, but here is what it
-   * would look like: */
-  /* munit_error("FAIL"); */
-  /* munit_errorf("Goodbye, cruel %s", "world"); */
-
-  /* There are macros for comparing lots of types. */
-  // munit_assert_char('a', ==, 'a');
-
-  /* Sure, you could just assert('a' == 'a'), but if you did that, a
-   * failed assertion would just say something like "assertion failed:
-   * val_uchar == 'b'".  µnit will tell you the actual values, so a
-   * failure here would result in something like "assertion failed:
-   * val_uchar == 'b' ('X' == 'b')." */
-  // munit_assert_uchar(val_uchar, ==, 'b');
-
-  /* Obviously we can handle values larger than 'char' and 'uchar'.
-   * There are versions for char, short, int, long, long long,
-   * int8/16/32/64_t, as well as the unsigned versions of them all. */
-  // munit_assert_short(42, <, val_short);
-
-  /* There is also support for size_t.
-   *
-   * The longest word in English without repeating any letters is
-   * "uncopyrightables", which has uncopyrightable (and
-   * dermatoglyphics, which is the study of fingerprints) beat by a
-   * character */
-  // munit_assert_size(strlen("uncopyrightables"), >, strlen("dermatoglyphics"));
-
-  /* Of course there is also support for doubles and floats. */
-  // munit_assert_double(pi, ==, 3.141592654);
-
-  /* If you want to compare two doubles for equality, you might want
-   * to consider using munit_assert_double_equal.  It compares two
-   * doubles for equality within a precison of 1.0 x 10^-(precision).
-   * Note that precision (the third argument to the macro) needs to be
-   * fully evaluated to an integer by the preprocessor so µnit doesn't
-   * have to depend pow, which is often in libm not libc. */
-  // munit_assert_double_equal(3.141592654, 3.141592653589793, 9);
-
-  /* And if you want to check strings for equality (or inequality),
-   * there is munit_assert_string_equal/not_equal.
-   *
-   * "stewardesses" is the longest word you can type on a QWERTY
-   * keyboard with only one hand, which makes it loads of fun to type.
-   * If I'm going to have to type a string repeatedly, let's make it a
-   * good one! */
-  munit_assert_string_equal(stewardesses, getscheme());
+  munit_assert_string_equal(stewardesses, test);
 
   /* A personal favorite macro which is fantastic if you're working
    * with binary data, is the one which naïvely checks two blobs of
