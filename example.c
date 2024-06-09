@@ -9,6 +9,7 @@
  *********************************************************************/
 
 #include "munit.h"
+#include <stdio.h>
 
 /* This is just to disable an MSVC warning about conditional
  * expressions being constant, which you shouldn't have to do for your
@@ -235,13 +236,6 @@ static MunitTest test_suite_tests[] = {
     MUNIT_TEST_OPTION_NONE,
     NULL
   },
-  /* Usually this is written in a much more compact format; all these
-   * comments kind of ruin that, though.  Here is how you'll usually
-   * see entries written: */
-  { (char*) "/example/rand", test_rand, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
-  /* To tell the test runner when the array is over, just add a NULL
-   * entry at the end. */
-  { (char*) "/example/parameters", test_parameters, NULL, NULL, MUNIT_TEST_OPTION_NONE, test_params },
   { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
 
