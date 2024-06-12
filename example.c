@@ -19,8 +19,29 @@
 #pragma warning(disable: 4127)
 #endif
 
-int buildrequest(const char *path, char *request) {
-  return snprintf(request, 288, "GETFILE GET %s \r\n\r\n", path);
+size_t getpath(char *req, size_t reqlen, char *path) {
+    unsigned short flag = 1;
+    size_t tokcnt = 0, tot = 0;
+
+    for (size_t i = 0; i < reqlen; i++) {
+        if ( req[i] == ' ' || req[i] == '\r' || req[i] == '\n') {
+            if (flag == 1) {
+                flag = 0;
+                ++tokcnt;
+            }
+        } else {
+            if (flag == 0) {
+                flag = 1;
+            }
+
+            if (tokcnt == 2) {
+                path[tot++] = req[i];
+            }
+        }
+    }
+
+    path[tot] = '\0';
+    return tot;
 }
 
 /* Tests are functions that return void, and take a single void*
@@ -28,10 +49,10 @@ int buildrequest(const char *path, char *request) {
 static MunitResult
 test_compare(const MunitParameter params[], void* data) {
 
-  char* stewardesses = "GETFILE GET /test/test.t \r\n\r\n";
+  char* stewardesses = "/fuck/fuck/shit";
 
   char test[1000];
-  buildrequest("/test/test.t", test);
+  size_t l = getpath("GETFILE GET /fuck/fuck/shit\r\n\r\n", 31, test);
 
   munit_assert_string_equal(stewardesses, test);
 
